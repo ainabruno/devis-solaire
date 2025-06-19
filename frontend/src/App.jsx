@@ -32,6 +32,8 @@ export default function App() {
 
     const doc = new jsPDF();
     const lineHeight = 10;
+    const today = new Date();
+    const dateFormatted = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
     let y = 20;
 
     doc.setFontSize(18);
@@ -39,8 +41,6 @@ export default function App() {
     y += lineHeight;
 
     doc.setFontSize(12);
-    const today = new Date();
-    const dateFormatted = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
     doc.text(`Date : ${dateFormatted}`, 150, 20);
 
 
