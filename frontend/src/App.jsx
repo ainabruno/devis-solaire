@@ -39,7 +39,11 @@ export default function App() {
     y += lineHeight;
 
     doc.setFontSize(12);
-    doc.text(`Date : ${new Date().toLocaleDateString()}`, 150, 20);
+    const today = new Date();
+    const dateFormatted = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
+    doc.text(`Date : ${dateFormatted}`, 150, 20);
+
+
     y += lineHeight * 2;
 
     doc.setFont("helvetica", "bold");
