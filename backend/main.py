@@ -5,9 +5,8 @@ import math
 
 app = FastAPI()
 
-origins = [
-    "https://frontent-foub.onrender.com", 
-]
+origins = ["https://frontent-foub.onrender.com"]
+
 
 # Autoriser le frontend
 app.add_middleware(
