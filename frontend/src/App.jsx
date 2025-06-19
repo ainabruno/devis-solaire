@@ -2,24 +2,31 @@ import { useState } from "react";
 import axios from "axios";
 import jsPDF from "jspdf";
 
-export default async function App() {
+export default function App() {
   const [surface, setSurface] = useState("");
   const [type, setType] = useState("résidentiel");
   const [besoin, setBesoin] = useState("");
   const [resultat, setResultat] = useState(null);
 
-
-
   const calculer = async () => {
-      const res = await axios.post("https://devis-solaire-backend.onrender.com/api/estimation", {
-      surface: parseFloat(surface),
-      type_installation: type,
-      besoin
-    });
-    setResultat(res.data);
+    try {
+      const res = await axios.post(
+        "https://devis-solaire-backend.onrender.com/api/estimation",
+        {
+          surface: parseFloat(surface),
+          type_installation: type,
+          besoin,
+        }
+      );
+      setResultat(res.data);
+    } catch (error) {
+      console.error("Erreur lors du calcul:", error);
+      alert("Erreur lors du calcul. Veuillez réessayer.");
+    }
   };
 
   const exportPDF = () => {
+    if (!resultat) return;
     const doc = new jsPDF();
     doc.text("Devis Installation Solaire", 20, 20);
     doc.text(`Surface : ${surface} m²`, 20, 30);
@@ -43,7 +50,11 @@ export default async function App() {
         className="border p-2 w-full"
       />
 
-      <select value={type} onChange={(e) => setType(e.target.value)} className="border p-2 w-full">
+      <select
+        value={type}
+        onChange={(e) => setType(e.target.value)}
+        className="border p-2 w-full"
+      >
         <option value="résidentiel">Résidentiel</option>
         <option value="agricole">Agricole</option>
         <option value="industriel">Industriel</option>
@@ -57,16 +68,28 @@ export default async function App() {
         className="border p-2 w-full"
       />
 
-      <button onClick={calculer} className="bg-blue-500 text-white p-2 rounded w-full">
+      <button
+        onClick={calculer}
+        className="bg-blue-500 text-white p-2 rounded w-full"
+      >
         Calculer
       </button>
 
       {resultat && (
         <div className="border p-4 mt-4 rounded bg-gray-50">
-          <p><strong>Panneaux :</strong> {resultat.panneaux}</p>
-          <p><strong>Puissance :</strong> {resultat.puissance} Wc</p>
-          <p><strong>Prix estimé :</strong> {resultat.prix} €</p>
-          <button onClick={exportPDF} className="mt-3 bg-green-600 text-white p-2 rounded">
+          <p>
+            <strong>Panneaux :</strong> {resultat.panneaux}
+          </p>
+          <p>
+            <strong>Puissance :</strong> {resultat.puissance} Wc
+          </p>
+          <p>
+            <strong>Prix estimé :</strong> {resultat.prix} €
+          </p>
+          <button
+            onClick={exportPDF}
+            className="mt-3 bg-green-600 text-white p-2 rounded"
+          >
             Exporter en PDF
           </button>
         </div>
