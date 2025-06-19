@@ -29,22 +29,58 @@ export default function App() {
 
   const exportPDF = () => {
     if (!resultat) return;
+
     const doc = new jsPDF();
-    doc.setFontSize(16);
-    doc.text("Devis Installation Solaire", 20, 20);
+    const lineHeight = 10;
+    let y = 20;
+
+    doc.setFontSize(18);
+    doc.text("FACTURE DEVIS INSTALLATION SOLAIRE", 20, y);
+    y += lineHeight;
+
     doc.setFontSize(12);
     doc.text(`Date : ${new Date().toLocaleDateString()}`, 150, 20);
-    doc.text(`Nom du client : ${nom}`, 20, 30);
-    doc.text(`Surface du toit : ${surface} m²`, 20, 40);
-    doc.text(`Type d'installation : ${type}`, 20, 50);
-    doc.text(`Besoins : ${besoin}`, 20, 60);
-    doc.text(`Nombre de panneaux : ${resultat.panneaux}`, 20, 70);
-    doc.text(`Puissance estimée : ${resultat.puissance} Wc`, 20, 80);
-    doc.text(`Production annuelle : ${resultat.production_kwh} kWh`, 20, 90);
-    doc.text(`Prix total : ${resultat.prix} €`, 20, 100);
-    doc.text(`Retour sur investissement : ${resultat.roi} ans`, 20, 110);
+    y += lineHeight * 2;
+
+    doc.setFont("helvetica", "bold");
+    doc.text("Informations client", 20, y);
+    y += lineHeight;
+
+    doc.setFont("helvetica", "normal");
+    doc.text(`Nom : ${nom}`, 20, y);
+    y += lineHeight;
+    doc.text(`Type d'installation : ${type}`, 20, y);
+    y += lineHeight;
+    doc.text(`Surface du toit : ${surface} m²`, 20, y);
+    y += lineHeight;
+    doc.text(`Besoins : ${besoin}`, 20, y);
+    y += lineHeight * 2;
+
+    doc.setFont("helvetica", "bold");
+    doc.text("Détails de l'installation", 20, y);
+    y += lineHeight;
+
+    doc.setFont("helvetica", "normal");
+    doc.text(`Nombre de panneaux : ${resultat.panneaux}`, 20, y);
+    y += lineHeight;
+    doc.text(`Puissance estimée : ${resultat.puissance} Wc`, 20, y);
+    y += lineHeight;
+
+    const prod = resultat.production_kwh !== undefined ? `${resultat.production_kwh} kWh` : "N/A";
+    const roi = resultat.roi !== undefined ? `${resultat.roi} ans` : "N/A";
+
+    doc.text(`Production annuelle estimée : ${prod}`, 20, y);
+    y += lineHeight;
+
+    doc.text(`Retour sur investissement : ${roi}`, 20, y);
+    y += lineHeight * 2;
+
+    doc.setFont("helvetica", "bold");
+    doc.text(`Total à payer : ${resultat.prix} €`, 20, y);
+
     doc.save("devis-solaire.pdf");
   };
+
 
   return (
     <div className="max-w-xl mx-auto mt-10 p-6 shadow rounded bg-white space-y-4">
