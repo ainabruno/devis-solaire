@@ -1,3 +1,4 @@
+// FRONTEND - React (App.jsx)
 import { useState } from "react";
 import axios from "axios";
 import jsPDF from "jspdf";
@@ -6,6 +7,7 @@ export default function App() {
   const [surface, setSurface] = useState("");
   const [type, setType] = useState("résidentiel");
   const [besoin, setBesoin] = useState("");
+  const [nom, setNom] = useState("");
   const [resultat, setResultat] = useState(null);
 
   const calculer = async () => {
@@ -28,19 +30,33 @@ export default function App() {
   const exportPDF = () => {
     if (!resultat) return;
     const doc = new jsPDF();
+    doc.setFontSize(16);
     doc.text("Devis Installation Solaire", 20, 20);
-    doc.text(`Surface : ${surface} m²`, 20, 30);
-    doc.text(`Type : ${type}`, 20, 40);
-    doc.text(`Besoins : ${besoin}`, 20, 50);
-    doc.text(`Nombre de panneaux : ${resultat.panneaux}`, 20, 60);
-    doc.text(`Puissance estimée : ${resultat.puissance} Wc`, 20, 70);
-    doc.text(`Prix total : ${resultat.prix} €`, 20, 80);
+    doc.setFontSize(12);
+    doc.text(`Date : ${new Date().toLocaleDateString()}`, 150, 20);
+    doc.text(`Nom du client : ${nom}`, 20, 30);
+    doc.text(`Surface du toit : ${surface} m²`, 20, 40);
+    doc.text(`Type d'installation : ${type}`, 20, 50);
+    doc.text(`Besoins : ${besoin}`, 20, 60);
+    doc.text(`Nombre de panneaux : ${resultat.panneaux}`, 20, 70);
+    doc.text(`Puissance estimée : ${resultat.puissance} Wc`, 20, 80);
+    doc.text(`Production annuelle : ${resultat.production_kwh} kWh`, 20, 90);
+    doc.text(`Prix total : ${resultat.prix} €`, 20, 100);
+    doc.text(`Retour sur investissement : ${resultat.roi} ans`, 20, 110);
     doc.save("devis-solaire.pdf");
   };
 
   return (
     <div className="max-w-xl mx-auto mt-10 p-6 shadow rounded bg-white space-y-4">
       <h1 className="text-2xl font-bold">Générateur de Devis Solaire</h1>
+
+      <input
+        type="text"
+        placeholder="Nom du client"
+        value={nom}
+        onChange={(e) => setNom(e.target.value)}
+        className="border p-2 w-full"
+      />
 
       <input
         type="number"
@@ -77,15 +93,11 @@ export default function App() {
 
       {resultat && (
         <div className="border p-4 mt-4 rounded bg-gray-50">
-          <p>
-            <strong>Panneaux :</strong> {resultat.panneaux}
-          </p>
-          <p>
-            <strong>Puissance :</strong> {resultat.puissance} Wc
-          </p>
-          <p>
-            <strong>Prix estimé :</strong> {resultat.prix} €
-          </p>
+          <p><strong>Panneaux :</strong> {resultat.panneaux}</p>
+          <p><strong>Puissance :</strong> {resultat.puissance} Wc</p>
+          <p><strong>Production annuelle :</strong> {resultat.production_kwh} kWh</p>
+          <p><strong>Prix estimé :</strong> {resultat.prix} €</p>
+          <p><strong>Retour sur investissement :</strong> {resultat.roi} ans</p>
           <button
             onClick={exportPDF}
             className="mt-3 bg-green-600 text-white p-2 rounded"
