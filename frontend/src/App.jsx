@@ -2,11 +2,18 @@ import { useState } from "react";
 import axios from "axios";
 import jsPDF from "jspdf";
 
-export default function App() {
+export default async function App() {
   const [surface, setSurface] = useState("");
   const [type, setType] = useState("résidentiel");
   const [besoin, setBesoin] = useState("");
   const [resultat, setResultat] = useState(null);
+
+  const res = await axios.post("https://devis-solaire-backend.onrender.com/api/estimation", {
+  surface: parseFloat(surface),
+  type_installation: type,
+  besoin
+});
+
 
   const calculer = async () => {
     const res = await axios.post("http://localhost:8000/api/estimation", {
