@@ -11,7 +11,7 @@ export default function App() {
   const calculer = async () => {
     try {
       const res = await axios.post(
-        "https://devis-solaire-backend.onrender.com/api/estimation",
+        "https://devis-solaire.onrender.com/api/estimation",
         {
           surface: parseFloat(surface),
           type_installation: type,
