@@ -5,10 +5,14 @@ import math
 
 app = FastAPI()
 
+origins = [
+    "https://frontent-foub.onrender.com", 
+]
+
 # Autoriser le frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
