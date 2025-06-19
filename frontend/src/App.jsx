@@ -8,15 +8,8 @@ export default async function App() {
   const [besoin, setBesoin] = useState("");
   const [resultat, setResultat] = useState(null);
 
-  const res = await axios.post("https://devis-solaire-backend.onrender.com/api/estimation", {
-  surface: parseFloat(surface),
-  type_installation: type,
-  besoin
-});
-
-
   const calculer = async () => {
-    const res = await axios.post("http://localhost:8000/api/estimation", {
+    const res = await axios.post("https://devis-solaire-backend.onrender.com/api/estimation", {
       surface: parseFloat(surface),
       type_installation: type,
       besoin
