@@ -42,7 +42,7 @@ export default function App() {
 
   const calculer = async () => {
     try {
-      const res = await mockAxios.post("https://devis-solaire.onrender.com/api/estimation", {
+      const res = await axios.post("https://devis-solaire.onrender.com/api/estimation", {
         surface: parseFloat(surface),
         type_installation: type,
         besoin
